@@ -1,0 +1,154 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">
+<title>学情诊断 · 智汇题库</title><style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"PingFang SC","Microsoft YaHei",system-ui,sans-serif;background:#F5F6F7;color:#1F2933;font-size:13px}
+a{color:inherit;text-decoration:none}
+.num{font-variant-numeric:tabular-nums;font-feature-settings:"tnum"}
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:220px;background:#4B3F72;color:#fff;display:flex;flex-direction:column}
+.logo{height:56px;display:flex;align-items:center;gap:9px;padding:0 18px;font-size:15px;font-weight:600;letter-spacing:.5px;border-bottom:1px solid rgba(255,255,255,.12)}
+.logo i{width:22px;height:22px;border-radius:6px;background:#E0A458;display:inline-block}
+.nav{flex:1;overflow:auto;padding:8px 0}
+.nav .g{padding:12px 18px 6px;font-size:11px;color:rgba(255,255,255,.45);letter-spacing:1px}
+.nav a{display:flex;align-items:center;gap:9px;padding:9px 18px;font-size:13px;color:rgba(255,255,255,.82);border-left:3px solid transparent}
+.nav a:hover{background:rgba(255,255,255,.08);color:#fff}
+.nav a.on{background:rgba(255,255,255,.14);color:#fff;border-left-color:#E0A458;font-weight:600}
+.nav a .dot{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.4)}
+.nav a.on .dot{background:#E0A458}
+.main{margin-left:220px;min-height:100vh}
+.top{height:56px;background:#fff;border-bottom:1px solid #E4E7EB;display:flex;align-items:center;padding:0 24px;gap:14px;position:sticky;top:0;z-index:9}
+.crumb{font-size:12px;color:#5B6770}.crumb b{color:#1F2933;font-weight:600}
+.top .sp{margin-left:auto}
+.icon-btn{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#5B6770;cursor:pointer}
+.icon-btn:hover{background:#F1F2F4}
+.ava{width:30px;height:30px;border-radius:50%;background:#7A6BA8;color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px}
+.who{font-size:12px;line-height:1.3}.who span{color:#5B6770;font-size:11px}
+.body{padding:24px}
+.card{background:#fff;border:1px solid #E4E7EB;border-radius:10px;margin-bottom:16px;overflow:hidden}
+.card-h{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid #EEF0F2}
+.card-h h2{font-size:14px;font-weight:600}.card-h .sub{font-size:12px;color:#5B6770}
+.card-b{padding:16px}
+.grid{display:grid;gap:14px}
+.kpi{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.kpi .k{background:#fff;border:1px solid #E4E7EB;border-radius:10px;padding:14px 16px}
+.kpi .k .t{font-size:12px;color:#5B6770;display:flex;align-items:center;gap:6px}
+.kpi .k .v{font-size:26px;font-weight:700;letter-spacing:-.5px;margin-top:6px;color:#4B3F72}
+.kpi .k .d{font-size:11px;color:#5B6770;margin-top:2px}
+.btn{height:32px;padding:0 14px;border-radius:7px;border:1px solid #D6DAE0;background:#fff;color:#1F2933;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.btn:hover{border-color:#7A6BA8;color:#4B3F72}
+.btn.p{background:#4B3F72;border-color:#4B3F72;color:#fff}.btn.p:hover{background:#3C3260;color:#fff}
+.btn.a{background:#E0A458;border-color:#E0A458;color:#3A2A10}
+.btn.d{border-color:#B02A37;color:#B02A37;background:#fff}
+.btn.sm{height:26px;padding:0 9px;font-size:12px;border-radius:6px}
+.inp{height:32px;border:1px solid #D6DAE0;border-radius:7px;padding:0 10px;font-size:13px;color:#1F2933;background:#fff;min-width:180px}
+.inp.wide{min-width:360px}
+.filter{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.filter label{font-size:12px;color:#5B6770}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;font-size:12px;font-weight:600;color:#5B6770;background:#FAFBFC;padding:10px 12px;border-bottom:1px solid #E4E7EB;white-space:nowrap}
+td{padding:11px 12px;border-bottom:1px solid #EEF0F2;font-size:13px;vertical-align:middle}
+tbody tr:hover{background:#FBFAFD}
+.tag{display:inline-flex;align-items:center;gap:4px;height:22px;padding:0 8px;border-radius:5px;font-size:11px;font-weight:600;border:1px solid}
+.tag.ok{color:#2B7955;background:#EAF4EF;border-color:#C6E0D3}
+.tag.warn{color:#8A5A12;background:#FDF3E3;border-color:#F0D9B0}
+.tag.err{color:#B02A37;background:#FBEBED;border-color:#EFC9CE}
+.tag.info{color:#7A6BA8;background:#F0EEF7;border-color:#D9D3EC}
+.tag.gray{color:#5B6770;background:#F2F4F6;border-color:#E1E5E9}
+.pager{display:flex;justify-content:flex-end;align-items:center;gap:6px;padding:14px 16px;font-size:12px;color:#5B6770}
+.pager b{min-width:28px;height:28px;border:1px solid #D6DAE0;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;color:#1F2933;font-weight:400}
+.pager b.on{background:#4B3F72;border-color:#4B3F72;color:#fff}
+.bar{height:8px;border-radius:4px;background:#EDEFF2;overflow:hidden}
+.bar i{display:block;height:100%;border-radius:4px;background:#4B3F72}
+.bar i.a{background:#E0A458}.bar i.ok{background:#2B7955}.bar i.d{background:#B02A37}
+.muted{color:#5B6770;font-size:12px}
+.h3{font-size:13px;font-weight:600;margin-bottom:10px;display:flex;align-items:center;gap:7px}
+.h3:before{content:"";width:3px;height:13px;border-radius:2px;background:#4B3F72;display:inline-block}
+.form-row{display:flex;margin-bottom:14px;align-items:flex-start}
+.form-row>label{width:110px;flex:none;text-align:right;padding-right:14px;font-size:13px;color:#5B6770;line-height:32px}
+.form-row .ctl{flex:1}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.three{display:grid;grid-template-columns:1fr 360px;gap:16px}
+.chart{height:220px;background:linear-gradient(180deg,#FCFCFD,#F7F8FA);border:1px dashed #DFE3E8;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#98A2B3;font-size:12px}
+/* 门户壳体（学生端） */
+.portal-top{height:60px;background:#4B3F72;color:#fff;display:flex;align-items:center;padding:0 40px;gap:26px}
+.portal-top .brand{font-size:16px;font-weight:600;display:flex;align-items:center;gap:9px}
+.portal-top .brand i{width:22px;height:22px;border-radius:6px;background:#E0A458;display:inline-block}
+.portal-top nav{display:flex;gap:4px}
+.portal-top nav a{padding:7px 14px;border-radius:7px;font-size:13px;color:rgba(255,255,255,.8)}
+.portal-top nav a.on{background:rgba(255,255,255,.16);color:#fff;font-weight:600}
+.portal-wrap{max-width:1240px;margin:0 auto;padding:24px}
+.opt{display:flex;align-items:center;gap:10px;border:1px solid #D6DAE0;border-radius:8px;padding:11px 14px;margin-bottom:10px;background:#fff}
+.opt.sel{border-color:#4B3F72;background:#F7F5FC}
+.opt .lb{width:22px;height:22px;border-radius:50%;border:1px solid #C9CED6;display:flex;align-items:center;justify-content:center;font-size:11px;color:#5B6770;flex:none}
+.opt.sel .lb{background:#4B3F72;border-color:#4B3F72;color:#fff}
+.steps{display:flex;gap:0;margin-bottom:18px}
+.steps .s{flex:1;display:flex;align-items:center;gap:8px;font-size:12px;color:#5B6770}
+.steps .s .n{width:22px;height:22px;border-radius:50%;border:1px solid #D6DAE0;display:flex;align-items:center;justify-content:center;font-size:11px}
+.steps .s.on{color:#4B3F72;font-weight:600}.steps .s.on .n{background:#4B3F72;border-color:#4B3F72;color:#fff}
+.steps .s:after{content:"";flex:1;height:1px;background:#E4E7EB;margin:0 10px}
+.steps .s:last-child:after{display:none}
+.drawer{position:fixed;right:0;top:0;bottom:0;width:420px;background:#fff;box-shadow:-8px 0 30px rgba(20,20,40,.12);padding:20px}
+</style></head><body>
+<div class="sidebar"><div class="logo"><i></i>智汇题库</div><div class="nav">
+<div class="g">题库中心</div>
+<a href="dashboard.html"><span class="dot"></span>题库统计首页</a>
+<a href="subject.html"><span class="dot"></span>学科管理</a>
+<a href="knowledge-tree.html"><span class="dot"></span>知识点树</a>
+<a href="question-list.html"><span class="dot"></span>题库列表</a>
+<a href="question-edit.html"><span class="dot"></span>题目编辑</a>
+<div class="g">组卷与练习</div>
+<a href="paper-workbench.html"><span class="dot"></span>组卷工作台</a>
+<a href="paper-list.html"><span class="dot"></span>试卷管理</a>
+<a href="audit.html"><span class="dot"></span>题目审核台</a>
+<a href="import.html"><span class="dot"></span>批量导入</a>
+<div class="g">学情诊断</div>
+<a class="on" href="mastery.html"><span class="dot"></span>学情诊断</a>
+<a href="class-stat.html"><span class="dot"></span>班级学情</a>
+<a href="rule-config.html"><span class="dot"></span>诊断规则配置</a>
+<div class="g">系统管理</div>
+<a href="user-role.html"><span class="dot"></span>用户与角色</a></div>
+<div style="padding:14px 18px;border-top:1px solid rgba(255,255,255,.12);font-size:11px;color:rgba(255,255,255,.5)">2026 春季学期 · 教研版</div></div>
+<div class="main"><div class="top"><div class="crumb">首页 / <b>学情诊断</b></div>
+<div class="sp"></div><div class="icon-btn">🔔</div><div class="icon-btn">?</div>
+<div class="ava">李</div><div class="who">李静<br><span>教研员 · 数学教研室</span></div></div>
+<div class="body">
+<div class="filter" style="margin-bottom:16px">
+<select class="inp"><option>高等数学</option><option>数据结构</option></select>
+<select class="inp"><option>计算机 2301 班</option><option>计算机 2302 班</option></select>
+<select class="inp"><option>最近 30 天</option><option>本学期</option></select>
+<button class="btn p">查询</button><button class="btn">重新计算</button>
+<span class="muted" style="margin-left:auto">规则版本 v3 · 上次重算 2026-11-01 02:00</span></div>
+<div class="grid" style="grid-template-columns:1fr 1.25fr">
+<div class="card" style="margin:0"><div class="card-h"><h2>知识点掌握度雷达</h2><span class="sub">班级均值</span></div>
+<div class="card-b"><div class="chart" style="height:280px">六维雷达：函数与极限 78 / 导数与微分 71 / 不定积分 54 / 定积分 62 / 偏导数 66 / 常微分方程 48</div></div></div>
+<div class="card" style="margin:0"><div class="card-h"><h2>薄弱知识点清单</h2><span class="sub">掌握度低于 70 共 5 项</span>
+<span style="margin-left:auto"><button class="btn sm a">一键生成专项练习</button></span></div>
+<table><thead><tr><th>知识点</th><th>掌握度</th><th>样本量</th><th>主要失分因素</th><th>结论</th></tr></thead><tbody>
+<tr><td><b>换元积分法</b></td><td><div style="display:flex;align-items:center;gap:8px"><div class="bar" style="width:74px"><i class="d" style="width:42%"></i></div><b class="num">42</b></div></td>
+<td class="num">86</td><td class="muted">正确率 41% · 重做失败 12 次</td><td><span class="tag err">严重薄弱</span></td></tr><tr><td><b>分部积分法</b></td><td><div style="display:flex;align-items:center;gap:8px"><div class="bar" style="width:74px"><i class="d" style="width:47%"></i></div><b class="num">47</b></div></td>
+<td class="num">62</td><td class="muted">耗时超标准 1.8 倍</td><td><span class="tag err">严重薄弱</span></td></tr><tr><td><b>定积分应用</b></td><td><div style="display:flex;align-items:center;gap:8px"><div class="bar" style="width:74px"><i class="a" style="width:51%"></i></div><b class="num">51</b></div></td>
+<td class="num">48</td><td class="muted">正确率 54% · 复习不及时</td><td><span class="tag warn">薄弱</span></td></tr><tr><td><b>特征值与特征向量</b></td><td><div style="display:flex;align-items:center;gap:8px"><div class="bar" style="width:74px"><i class="a" style="width:58%"></i></div><b class="num">58</b></div></td>
+<td class="num">34</td><td class="muted">重做正确率 60%</td><td><span class="tag warn">薄弱</span></td></tr><tr><td><b>偏导数与全微分</b></td><td><div style="display:flex;align-items:center;gap:8px"><div class="bar" style="width:74px"><i class="a" style="width:66%"></i></div><b class="num">66</b></div></td>
+<td class="num">92</td><td class="muted">正确率 71%，稳定</td><td><span class="tag gray">基本掌握</span></td></tr>
+</tbody></table>
+<div class="muted" style="padding:12px 16px">样本少于 5 次的知识点标注「数据不足」，不参与薄弱排名。</div></div></div>
+<div class="card"><div class="card-h"><h2>掌握度计算留痕</h2><span class="sub">相同输入与规则版本必须得到相同结果</span></div>
+<div class="card-b" style="padding:0">
+<table><thead><tr><th>知识点</th><th>正确率 40%</th><th>耗时 15%</th><th>重做 20%</th><th>考纲权重 15%</th><th>复习及时率 10%</th><th>加权总分</th><th>等级</th></tr></thead><tbody>
+<tr><td><b>换元积分法</b></td><td class="num">41.0 → 41</td><td class="num">0.0 → 22</td><td class="num">46.0 → 46</td><td class="num">4.0 → 40</td><td class="num">0 → 0</td><td><b class="num" style="color:#B02A37">32.7</b></td><td><span class="tag err">严重薄弱</span></td></tr>
+<tr><td>分部积分法</td><td class="num">52.0 → 52</td><td class="num">0.0 → 18</td><td class="num">50.0 → 50</td><td class="num">3.0 → 30</td><td class="num">40 → 40</td><td><b class="num">38.1</b></td><td><span class="tag err">严重薄弱</span></td></tr>
+<tr><td>定积分</td><td class="num">68.0 → 68</td><td class="num">0.72 → 72</td><td class="num">70.0 → 70</td><td class="num">12.0 → 100</td><td class="num">60 → 60</td><td><b class="num">71.0</b></td><td><span class="tag warn">基本掌握</span></td></tr>
+<tr><td>偏导数与全微分</td><td class="num">82.0 → 82</td><td class="num">0.88 → 88</td><td class="num">70.0 → 70</td><td class="num">9.0 → 75</td><td class="num">80 → 80</td><td><b class="num" style="color:#2B7955">80.9</b></td><td><span class="tag ok">基本掌握</span></td></tr>
+</tbody></table></div></div>
+<div class="card"><div class="card-h"><h2>诊断结论与人工修正</h2><span class="sub">修正需填写不少于 5 字原因，原始结果保留</span></div>
+<div class="card-b two">
+<div><div class="h3">系统结论</div>
+<div style="font-size:13px;line-height:2">等级：<b style="color:#B02A37">严重薄弱</b>（32.7 分，低于 50 分档）<br>
+主要影响因素：近 30 天正确率仅 41%（贡献失分 23.6）、平均耗时达标准时长 2.3 倍（贡献失分 12）<br>
+未满足条件：错题连续答对未达 2 次；1 天/3 天/7 天复习计划完成 0 项<br>
+可改进项：先重做 8 道换元积分基础题；为错题建立 1-3-7 复习计划；变式题推送 3 道</div>
+<div style="margin-top:14px;display:flex;gap:8px"><button class="btn a">采纳结论并推送练习</button><button class="btn">人工修正</button></div></div>
+<div style="border-left:1px solid #EEF0F2;padding-left:20px"><div class="h3">修正记录</div>
+<div class="muted" style="line-height:2">2026-10-30 09:14 李静：该班刚上完换元法第 2 课时，样本偏少 → 修正为「薄弱」<br>原因：教学进度滞后导致正确率偏低，非掌握问题<br>
+2026-10-26 16:40 王振：维持系统结论</div>
+<div style="margin-top:14px;background:#FDF3E3;border:1px solid #F0D9B0;border-radius:8px;padding:12px;font-size:12px;line-height:1.9">
+<b>修正率统计</b><br>本月诊断 486 条 · 人工修正 37 条（7.6%）· 修正后练习完成率 82%</div></div></div></div></div></div></body></html>
